@@ -1,7 +1,7 @@
 seed: 42
 solution: "01001101"
-minGenomeLength: 5
-maxGenomeLength: 15
+minGenomeLength: 72
+maxGenomeLength: 72
 maxGeneration: 100000
 populationSize: 25
 
@@ -11,10 +11,10 @@ tournamentSize: 4
 
 # PARENTS , CHILDREN , BOTH
 mutationTargetStrategy: "CHILDREN"
-mutationRate: 0.03
-bitFlipRate: 0.01
-bitAddRate: 0.01
-bitRemoveRate: 0.01
+mutationRate: 0.5
+bitFlipRate: 1.0
+bitAddRate: 0.0
+bitRemoveRate: 0.0
 
 # ONE_POINT , TWO_POINT , UNIFORM , ARITHMETIC
 crossoverStrategy: "UNIFORM"

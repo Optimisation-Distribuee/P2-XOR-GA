@@ -15,6 +15,8 @@ import java.util.*;
  */
 public class GeneticAlgorithm {
 
+    public final int MAX_THEORETICAL_FITNESS = 4;
+
     /**
      * Configuration object containing all parameters for the genetic algorithm.
      */
@@ -43,7 +45,6 @@ public class GeneticAlgorithm {
 
         // Initialize the starting population based on the configuration.
         this.population = new Population(
-                config.getSolution(),
                 config.getPopulationSize(),
                 config.getMinGenomeLength(),
                 config.getMaxGenomeLength(),
@@ -84,7 +85,7 @@ public class GeneticAlgorithm {
 
             // Check for a perfect solution in the current population.
             for (Individual individual: individuals){
-                if(individual.getGenome().equals(this.config.getSolution())){
+                if(individual.getFitness() == MAX_THEORETICAL_FITNESS){
                     System.out.println("Solution found in " + i + " generations");
                     return this.population.getFittest();
                 }
@@ -118,7 +119,7 @@ public class GeneticAlgorithm {
 
             // Create the next generation's population from survivors and new children.
             survivors.addAll(children);
-            this.population = new Population(config.getSolution(), survivors, config.getSeed(), config.getLengthPunishingStrategy(), config.getLengthPunishingFactor());
+            this.population = new Population(survivors, config.getSeed(), config.getLengthPunishingStrategy(), config.getLengthPunishingFactor());
         }
 
         System.out.println("No solution found in " + maxGeneration + " generations");

@@ -58,6 +58,22 @@ public class Population {
         this.updateFitness(solution);
     }
 
+    public Population(int size, int minGenomeLength, int maxGenomeLength, int seed, LengthPunishingStrategy lengthPunishingStrategy, double lengthPunishingFactor){
+        this.random = new Random(seed);
+        this.lengthPunishingStrategy = lengthPunishingStrategy;
+        this.lengthPunishingFactor = lengthPunishingFactor;
+        this.initPopulation(size, minGenomeLength, maxGenomeLength);
+        this.updateFitness();
+    }
+
+    public Population(List<Individual> individuals, int seed, LengthPunishingStrategy lengthPunishingStrategy, double lengthPunishingFactor) {
+        this.random = new Random(seed);
+        this.individuals = individuals;
+        this.lengthPunishingStrategy = lengthPunishingStrategy;
+        this.lengthPunishingFactor = lengthPunishingFactor;
+        this.updateFitness();
+    }
+
     /**
      * Constructs a new population with randomly generated individuals of a fixed genome length.
      * After initialization, the fitness of each individual is calculated against the provided solution.
@@ -127,6 +143,44 @@ public class Population {
                 case EXPONENTIAL -> penalty = (int) Math.pow(genome.size() - solution.size(), 2);
             }
             fitness = (int) Math.max(0, fitness - lengthPunishingFactor * penalty);
+            individual.setFitness(fitness);
+        }
+    }
+
+    public void updateFitness() {
+        for (Individual individual : this.individuals) {
+            List<Byte> genome = individual.getGenome();
+
+            // Convert genome (List<Byte>) to a single bitstring
+            StringBuilder bitstring = new StringBuilder();
+            for (Byte b : genome) {
+                bitstring.append(b == 0 ? '0' : '1');
+            }
+
+            int fitness = 0;
+
+            // XOR truth table
+            double[][] inputs = {
+                    {0, 0},
+                    {0, 1},
+                    {1, 0},
+                    {1, 1}
+            };
+            double[] expected = {0, 1, 1, 0};
+
+            // Evaluate performance on all four cases
+            for (int i = 0; i < 4; i++) {
+                double prediction = XORNetwork.evaluate(bitstring.toString(), inputs[i][0], inputs[i][1]);
+
+                // Convert sigmoid output to binary (0 or 1)
+                int output = prediction >= 0.5 ? 1 : 0;
+
+                if (output == (int) expected[i]) {
+                    fitness++;
+                }
+            }
+
+            // Perfect XOR = fitness 4
             individual.setFitness(fitness);
         }
     }
