@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>be.brw</groupId>
-    <artifactId>PR1-Bitstring</artifactId>
+    <artifactId>P2-XOR-GA</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>PR1-Bitstring</name>
+    <name>P2-XOR-GA</name>
     <url>https://maven.apache.org</url>
 
     <properties>
