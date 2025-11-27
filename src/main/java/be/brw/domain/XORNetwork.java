@@ -10,15 +10,15 @@ public class XORNetwork {
     public static double compute(double x1, double x2,
                                  double w11, double w12, double w21, double w22,
                                  double w3, double w4,
-                                 double b1, double b2, double b3) {
+                                 double b1, double b2, double b3, double wb1, double wb2, double wb3) {
 
-        double z11 = x1 * w11 + x2 * w21 + b1;
-        double z12 = x1 * w12 + x2 * w22 + b2;
+        double z11 = x1 * w11 + x2 * w21 + b1 * wb1;
+        double z12 = x1 * w12 + x2 * w22 + b2 * wb2;
 
         double a11 = sigmoid(z11);
         double a12 = sigmoid(z12);
 
-        double z2 = a11 * w3 + a12 * w4 + b3;
+        double z2 = a11 * w3 + a12 * w4 + b3 * wb3;
         return sigmoid(z2);
     }
 
@@ -29,13 +29,13 @@ public class XORNetwork {
         final double max = 5.0;
 
         // We expect exactly 9 parameters * 8 bits = 72 bits
-        if (bitstring.length() != bitsPerParam * 9) {
-            throw new IllegalArgumentException("Bitstring must be exactly " + (bitsPerParam * 9) + " bits long.");
+        if (bitstring.length() != bitsPerParam * 12) {
+            throw new IllegalArgumentException("Bitstring must be exactly " + (bitsPerParam * 12) + " bits long.");
         }
 
-        double[] params = new double[9];
+        double[] params = new double[12];
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 12; i++) {
             String segment = bitstring.substring(i * bitsPerParam, (i + 1) * bitsPerParam);
             int intVal = Integer.parseInt(segment, 2);
             double value = min + (intVal / 255.0) * (max - min);
@@ -53,14 +53,18 @@ public class XORNetwork {
         double w4  = params[7];
         double b3  = params[8];
 
+        double wb1  = params[9];
+        double wb2  = params[10];
+        double wb3  = params[11];
+
         // Compute the prediction
-        return compute(x1, x2, w11, w12, w21, w22, w3, w4, b1, b2, b3);
+        return compute(x1, x2, w11, w12, w21, w22, w3, w4, b1, b2, b3, wb1, wb2, wb3);
     }
 
     // ===== Example usage =====
     public static void main(String[] args) {
         // Example: random 72-bit chromosome (each param = 8 bits)
-        String bitstring = "101101010100101111100010001011011001110011110001010100101011001011001010";
+        String bitstring = "101101010100101111100010001011011001110011110001010100101011001011001010010101010101010101010101";
         double output = evaluate(bitstring, 1, 0);
         System.out.println("Prediction for (1,0): " + output);
     }

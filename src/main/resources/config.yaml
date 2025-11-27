@@ -1,7 +1,7 @@
 seed: 42
 solution: "01001101"
-minGenomeLength: 72
-maxGenomeLength: 72
+minGenomeLength: 96
+maxGenomeLength: 96
 maxGeneration: 100000
 populationSize: 25
 
